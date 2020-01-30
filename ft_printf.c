@@ -6,7 +6,7 @@
 /*   By: jdussert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 13:21:32 by jdussert          #+#    #+#             */
-/*   Updated: 2020/01/29 15:29:45 by jdussert         ###   ########.fr       */
+/*   Updated: 2020/01/30 17:12:06 by jdussert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,9 +184,8 @@ void	ft_d_type(va_list parameters, t_printf *args, int *res)
 	{
 		while (i++ < args->width)
 			ft_putchar(' ', res);
-		str = "\0";
 	}
-	if (args->precision <= len && args->width <= len)
+	else if (args->precision <= len && args->width <= len)
 		ft_putstr(str, res);
 	else if (args->width > len && args->precision <= len)
 	{
@@ -208,6 +207,8 @@ void	ft_d_type(va_list parameters, t_printf *args, int *res)
 			ft_putchar('0', res);
 		ft_putstr(str, res);
 	}
+	free(str);
+	str = NULL;
 }
 
 void	ft_x_type(va_list parameters, t_printf *args, int *res)
@@ -225,9 +226,8 @@ void	ft_x_type(va_list parameters, t_printf *args, int *res)
 	{
 		while (i++ < args->width)
 			ft_putchar(' ', res);
-		str = "\0";
 	}
-	if (args->precision <= len && args->width <= len)
+	else if (args->precision <= len && args->width <= len)
 		ft_putstr(str, res);
 	else if (args->width > len && args->precision <= len)
 	{
@@ -249,7 +249,8 @@ void	ft_x_type(va_list parameters, t_printf *args, int *res)
 			ft_putchar('0', res);
 		ft_putstr(str, res);
 	}
-
+	free(str);
+	str = NULL;
 }
 
 int 	ft_printf(const char *format, ... )
