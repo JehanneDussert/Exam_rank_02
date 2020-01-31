@@ -6,7 +6,7 @@
 /*   By: jdussert <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/28 13:21:32 by jdussert          #+#    #+#             */
-/*   Updated: 2020/01/30 17:20:05 by jdussert         ###   ########.fr       */
+/*   Updated: 2020/01/31 14:08:36 by jdussert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,11 +175,19 @@ void	ft_d_type(va_list parameters, t_printf *args, int *res)
 	int			len;
 	char		*str;
 	int			i;
+	char	*tmp;
 
 	i = 0;
 	n = (int)va_arg(parameters, int);
 	str = ft_itoa_base(n, 10, "0123456789");
 	len = ft_strlen(str);
+	tmp = str;
+	if (str[0] == '-')
+	{
+		ft_putchar('-', res);
+		tmp++;
+		args->precision += 1;
+	}
 	if (n == 0 && (args->precision == 0 || args->precision == -1))
 	{
 		while (i++ < args->width)
@@ -205,7 +213,10 @@ void	ft_d_type(va_list parameters, t_printf *args, int *res)
 	{
 		while (args->precision-- > len)
 			ft_putchar('0', res);
-		ft_putstr(str, res);
+		if (str[0] == '-')
+			ft_putstr(tmp, res);
+		else
+			ft_putstr(str, res);
 	}
 	free(str);
 	str = NULL;
@@ -217,18 +228,28 @@ void	ft_x_type(va_list parameters, t_printf *args, int *res)
 	int			len;
 	char		*str;
 	int			i;
+	char	*tmp;
 
 	i = 0;
 	n = (unsigned int)va_arg(parameters, unsigned int);
 	str = ft_itoa_base(n, 16, "0123456789abcdef");
 	len = ft_strlen(str);
+	tmp = str;
+	if (str[0] == '-')
+	{
+		ft_putchar('-', res);
+		tmp++;
+		args->precision += 1;
+	}
 	if (n == 0 && (args->precision == 0 || args->precision == -1))
 	{
 		while (i++ < args->width)
 			ft_putchar(' ', res);
 	}
 	else if (args->precision <= len && args->width <= len)
+	{
 		ft_putstr(str, res);
+	}
 	else if (args->width > len && args->precision <= len)
 	{
 		while (i++ < args->width - len)
@@ -247,7 +268,10 @@ void	ft_x_type(va_list parameters, t_printf *args, int *res)
 	{
 		while (args->precision-- > len)
 			ft_putchar('0', res);
-		ft_putstr(str, res);
+		if (str[0] == '-')
+			ft_putstr(tmp, res);
+		else
+			ft_putstr(str, res);
 	}
 	free(str);
 	str = NULL;
@@ -294,9 +318,9 @@ int 	ft_printf(const char *format, ... )
 
 int	main(void)
 {
-	printf("test :\n%10.0d\n", 0);
+	ft_printf("test :\n%10.0d\n", 0);
 	ft_printf("mon test :\n%10.0d\n", 0);
-	ft_printf("%10.0s\n", "HEY BEBE");
-	ft_printf("Magic %s is %5d\n", "number", 42);
+	ft_printf("%10.80s\n", "Bonjour a tous");
+	ft_printf("Magic %s is %.5d\n", "number", -42);
 	ft_printf("Hexadecimal for %.10d is %.10x\n", 0, 0);
 }
